@@ -55,7 +55,8 @@ model User {
 model Deck {
   id        Int      @id @default(autoincrement())
   name      String
-  userId    Int      @relation(fields: [userId], references: [id])
+  userId    Int
+  user     User     @relation("UserDecks", fields: [userId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   cards        DeckCard[]
