@@ -56,6 +56,36 @@ async function main() {
         )
     );
 
+    // Create decks for each user
+    const redDeck = await prisma.deck.create({
+        data: {
+            name: "starter deck",
+            userId: redUser.id,
+        },
+    });
+
+    const blueDeck = await prisma.deck.create({
+        data: {
+            name: "starter deck",
+            userId: blueUser.id,
+        },
+    });
+
+    const allCards = await prisma.card.findMany();
+    const pick = (n: number) => [...allCards].sort(() => Math.random() - 0.5).slice(0, n);
+
+
+    const redCards = pick(10);
+    const blueCards = pick(10);
+
+    await prisma.deckCard.createMany({
+        data: redCards.map(card => ({ deckId: redDeck.id, cardId: card.id })),
+    });
+
+    await prisma.deckCard.createMany({
+        data: blueCards.map(card => ({ deckId: blueDeck.id, cardId: card.id })),
+    });
+
     console.log(`✅ Created ${pokemonData.length} Pokemon cards`);
 
     console.log("\n🎉 Database seeding completed!");
