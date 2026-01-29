@@ -8,8 +8,12 @@ import {PokemonType} from "../src/generated/prisma/enums";
 async function main() {
     console.log("🌱 Starting database seed...");
 
+    await prisma.deckCard.deleteMany();
+    await prisma.deck.deleteMany();
     await prisma.card.deleteMany();
     await prisma.user.deleteMany();
+    
+    
 
     const hashedPassword = await bcrypt.hash("password123", 10);
 
@@ -56,35 +60,26 @@ async function main() {
         )
     );
 
-    // Create decks for each user
-    const redDeck = await prisma.deck.create({
-        data: {
-            name: "starter deck",
-            userId: redUser.id,
-        },
-    });
+    // console.log(randomCards);
+    // console.log(createdCards)0*;
 
-    const blueDeck = await prisma.deck.create({
-        data: {
-            name: "starter deck",
-            userId: blueUser.id,
-        },
-    });
-
-    const allCards = await prisma.card.findMany();
-    const pick = (n: number) => [...allCards].sort(() => Math.random() - 0.5).slice(0, n);
-
-
-    const redCards = pick(10);
-    const blueCards = pick(10);
-
-    await prisma.deckCard.createMany({
-        data: redCards.map(card => ({ deckId: redDeck.id, cardId: card.id })),
-    });
-
-    await prisma.deckCard.createMany({
-        data: blueCards.map(card => ({ deckId: blueDeck.id, cardId: card.id })),
-    });
+    const users = [redUser, blueUser];
+    for(const user of users) {
+          const randomCards = [...createdCards].sort(() => 0.5 - Math.random()).slice(0, 10);
+        await prisma.deck.create({
+            data: {
+                name: `${user.username}'s Deck`,
+                userId: user.id,
+                cards: {
+                    create: randomCards.map((randomCard) => {
+                        return {
+                            cardId: randomCard.id
+                        }
+                    })
+                }
+            },
+        });
+    }
 
     console.log(`✅ Created ${pokemonData.length} Pokemon cards`);
 
