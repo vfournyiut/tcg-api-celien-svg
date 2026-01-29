@@ -8,8 +8,12 @@ import {PokemonType} from "../src/generated/prisma/enums";
 async function main() {
     console.log("🌱 Starting database seed...");
 
+    await prisma.deckCard.deleteMany();
+    await prisma.deck.deleteMany();
     await prisma.card.deleteMany();
     await prisma.user.deleteMany();
+    
+    
 
     const hashedPassword = await bcrypt.hash("password123", 10);
 
@@ -55,6 +59,27 @@ async function main() {
             })
         )
     );
+
+    // console.log(randomCards);
+    // console.log(createdCards)0*;
+
+    const users = [redUser, blueUser];
+    for(const user of users) {
+          const randomCards = [...createdCards].sort(() => 0.5 - Math.random()).slice(0, 10);
+        await prisma.deck.create({
+            data: {
+                name: `${user.username}'s Deck`,
+                userId: user.id,
+                cards: {
+                    create: randomCards.map((randomCard) => {
+                        return {
+                            cardId: randomCard.id
+                        }
+                    })
+                }
+            },
+        });
+    }
 
     console.log(`✅ Created ${pokemonData.length} Pokemon cards`);
 

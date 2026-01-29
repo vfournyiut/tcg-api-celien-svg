@@ -38,13 +38,40 @@ model Card {
   imgUrl        String?
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
+  decks     DeckCard[] 
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
+  id            Int      @id @default(autoincrement())
   username  String   @unique
   email     String   @unique
   password  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  decks     Deck[]   @relation("UserDecks") 
 }
+
+model Deck {
+  id        Int      @id @default(autoincrement())
+  name      String
+  userId    Int
+  user     User     @relation("UserDecks", fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  cards        DeckCard[]
+}
+
+model DeckCard {
+  id      Int @id @default(autoincrement())
+  deckId  Int
+  cardId  Int
+
+  deck    Deck @relation(fields: [deckId], references: [id], onDelete: Cascade)
+  card    Card @relation(fields: [cardId], references: [id], onDelete: Cascade)
+
+  @@unique([deckId, cardId])
+}
+
+
+
