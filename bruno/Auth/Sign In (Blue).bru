@@ -5,14 +5,14 @@ meta {
 }
 
 post {
-  url: {{baseUrl}}/api/auth/sign-in
+  url: http://localhost:51212/api/auth/sign-in
   body: json
   auth: none
 }
 
 body:json {
   {
-    "email": "blue@example.com",
+    "email": "blue@tcg.com",
     "password": "password123"
   }
 }
@@ -24,9 +24,13 @@ script:post-response {
 }
 
 docs {
-  Sign in as Blue user (from seed data).
-
+  Se connecter avec le compte utilisateur Blue (depuis les données seed).
+  
+  Récupère l'utilisateur par email, vérifie le mot de passe et génère un token JWT.
+  
   Returns:
-  - 200: Sign in successful with JWT token (automatically saved to environment)
-  - 401: Invalid credentials
+  - 200: Connexion réussie avec token JWT (automatiquement sauvegardé dans l'environnement)
+  - 400: Données manquantes
+  - 401: Email inexistant ou mot de passe incorrect
+  - 500: Erreur serveur
 }

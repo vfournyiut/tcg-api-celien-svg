@@ -5,7 +5,7 @@ meta {
 }
 
 patch {
-  url: {{baseUrl}}/api/decks/{{deckId}}
+  url: http://localhost:51212/api/decks/{{deckId}}
   body: json
   auth: bearer
 }
@@ -23,16 +23,16 @@ body:json {
 
 docs {
   Update an existing deck.
-
+  
   Requires authentication and deck ownership.
-
+  
   Variables needed:
   - deckId: The ID of the deck to update (get from Get My Decks response)
-
+  
   Body:
   - name: string (optional) - New name for the deck
   - cards: array of numbers (optional) - Must be exactly 10 valid card IDs if provided
-
+  
   Returns:
   - 200: Deck updated successfully
   - 400: Invalid input (must be exactly 10 valid card IDs if cards provided)

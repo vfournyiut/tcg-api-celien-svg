@@ -29,17 +29,24 @@ async function main() {
                 email: "blue@example.com",
                 password: hashedPassword,
             },
+            {
+                username: "jwt",
+                email: "jwt@example.com",
+                password: hashedPassword,
+            },
         ],
     });
 
     const redUser = await prisma.user.findUnique({where: {email: "red@example.com"}});
     const blueUser = await prisma.user.findUnique({where: {email: "blue@example.com"}});
+    const jwtUser = await prisma.user.findUnique({where: {email: "jwt@example.com"}});
+
 
     if (!redUser || !blueUser) {
         throw new Error("Failed to create users");
     }
 
-    console.log("✅ Created users:", redUser.username, blueUser.username);
+    console.log("✅ Created users:", redUser.username, blueUser.username, jwtUser?.username);
 
     const pokemonDataPath = join(__dirname, "data", "pokemon.json");
     const pokemonJson = readFileSync(pokemonDataPath, "utf-8");
