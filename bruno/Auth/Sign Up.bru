@@ -5,7 +5,7 @@ meta {
 }
 
 post {
-  url: http://localhost:51212/api/auth/sign-up
+  url: {{baseUrl}}/api/auth/sign-up
   body: json
   auth: none
 }
@@ -25,16 +25,13 @@ script:post-response {
 }
 
 docs {
-  Créer un nouveau compte utilisateur avec authentification JWT.
-  
-  Valide les données, vérifie l'unicité de l'email, hash le mot de passe et génère un token JWT (validité : 7 jours).
-  
-  Utilisateurs du seed : red@example.com et blue@example.com.
+  Sign up a new user account.
+
+  Note: Les utilisateurs du seed sont red@example.com et blue@example.com.
   Utilisez un email différent pour créer un nouveau compte.
-  
+
   Returns:
-  - 201: Inscription réussie avec token JWT (automatiquement sauvegardé dans l'environnement)
-  - 400: Données manquantes/invalides
-  - 409: Email ou username déjà utilisé
-  - 500: Erreur serveur
+  - 201: User created successfully with JWT token (automatically saved to environment)
+  - 400: Invalid input
+  - 409: User already exists (email or username taken)
 }

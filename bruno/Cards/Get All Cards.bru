@@ -5,7 +5,7 @@ meta {
 }
 
 get {
-  url: http://localhost:51212/api/cards
+  url: {{baseUrl}}/api/cards
   body: none
   auth: bearer
 }
@@ -16,9 +16,9 @@ auth:bearer {
 
 docs {
   Get all available cards in the game.
-  
+
   Requires authentication.
-  
+
   Returns:
   - 200: List of all cards
   - 401: Unauthorized (missing or invalid token)

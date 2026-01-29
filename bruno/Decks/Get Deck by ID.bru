@@ -5,7 +5,7 @@ meta {
 }
 
 get {
-  url: http://localhost:51212/api/decks/{{deckId}}
+  url: {{baseUrl}}/api/decks/{{deckId}}
   body: none
   auth: bearer
 }
@@ -16,12 +16,12 @@ auth:bearer {
 
 docs {
   Get a specific deck by its ID.
-  
+
   Requires authentication and deck ownership.
-  
+
   Variables needed:
   - deckId: The UUID of the deck to retrieve (get from Get My Decks response)
-  
+
   Returns:
   - 200: Deck details with cards
   - 401: Unauthorized
