@@ -13,7 +13,7 @@ post {
 body:json {
   {
     "username": "ash",
-    "email": "ash@example.com",
+    "email": "ash@tcg.com",
     "password": "password123"
   }
 }
@@ -26,10 +26,10 @@ script:post-response {
 
 docs {
   Sign up a new user account.
-
+  
   Note: Les utilisateurs du seed sont red@example.com et blue@example.com.
   Utilisez un email différent pour créer un nouveau compte.
-
+  
   Returns:
   - 201: User created successfully with JWT token (automatically saved to environment)
   - 400: Invalid input
