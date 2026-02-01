@@ -72,7 +72,7 @@ async function main() {
 
     const users = [redUser, blueUser];
     for(const user of users) {
-          const randomCards = [...createdCards].sort(() => 0.5 - Math.random()).slice(0, 10);
+        const randomCards = [...createdCards].sort(() => 0.5 - Math.random()).slice(0, 10);
         await prisma.deck.create({
             data: {
                 name: `${user.username}'s Deck`,
