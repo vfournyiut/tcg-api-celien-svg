@@ -4,6 +4,7 @@ import express from "express";
 import cors from "cors";
 import {authRouter} from "./auth/auth.route";
 import cardsRoutes from "./cards/cards.route";
+import deckrouter from "./decks/decks.route";
 
 // Create Express app
 export const app = express();
@@ -31,6 +32,9 @@ app.use("/api/auth", authRouter);
 
 // routes du catalogue de cartes
 app.use("/api/cards", cardsRoutes);
+
+// routes des decks
+app.use("/api/decks", deckrouter);
 
 // Start server only if this file is run directly (not imported for tests)
 if (require.main === module) {
