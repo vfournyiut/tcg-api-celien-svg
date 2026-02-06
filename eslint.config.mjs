@@ -6,23 +6,21 @@ export default tseslint.config(
   ...tseslint.configs.recommended,
   {
     rules: {
-    eqeqeq: ['error', 'always'],
-    'prefer-const': ['error', { destructuring: 'all' }],
-    'no-useless-rename': 'error',
-    'no-useless-constructor': 'error',
-    'no-console': 'error',
-    'no-debugger': 'error',
-    'no-throw-literal': 'error',
-    'no-unused-expressions': 'error',
-    'no-var': 'error',
-    'no-redeclare': 'error',
-    'no-const-assign': 'error',
-
+      eqeqeq: ['error', 'always'],
+      'prefer-const': ['error', { destructuring: 'all' }],
+      'no-useless-rename': 'error',
+      'no-useless-constructor': 'error',
+      'no-console': 'error',
+      'no-debugger': 'error',
+      'no-throw-literal': 'error',
+      'no-unused-expressions': 'error',
+      'no-var': 'error',
+      'no-redeclare': 'error',
+      'no-const-assign': 'error',
     },
     files: ['**/*.ts', '**/*.tsx'],
-    
   },
   {
     ignores: ['node_modules/**', 'dist/**', 'build/**'],
-  }
+  },
 )
