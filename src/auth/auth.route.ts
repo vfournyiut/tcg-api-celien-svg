@@ -61,8 +61,8 @@ authRouter.post('/sign-up', async (req: Request, res: Response) => {
             },
         })
     } catch (error) {
-        console.error('Erreur lors de l\'inscription:', error)
-        return res.status(500).json({error: 'Erreur serveur lors de l\'inscription'})
+        console.error('Erreur lors de l inscription:', error)
+        return res.status(500).json({error: 'Erreur serveur lors de l inscription'})
     }
 })
 

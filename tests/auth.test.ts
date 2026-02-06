@@ -111,7 +111,7 @@ describe('Authentication Endpoints', () => {
             expect(response.body.error).toBe('Email déjà utilisé')
         })
 // erreur serveur
-        it('dois retourner 500 en cas d\'erreur serveur', async () => {
+        it('dois retourner 500 en cas d erreur serveur', async () => {
             const newUser = {
                 email: 'test@example.com',
                 username: 'testuser',
@@ -125,7 +125,7 @@ describe('Authentication Endpoints', () => {
                 .send(newUser)
 
             expect(response.status).toBe(500)
-            expect(response.body.error).toBe('Erreur serveur lors de l\'inscription')
+            expect(response.body.error).toBe('Erreur serveur lors de l inscription')
         })
     })
 // la conexion
@@ -186,7 +186,7 @@ describe('Authentication Endpoints', () => {
             }
         })
 // user inexistant
-        it('dois retourner 401 si utilisateur n\'existe pas', async () => {
+        it('dois retourner 401 si utilisateur n existe pas', async () => {
             const credentials = {
                 email: 'nonexistent@example.com',
                 password: 'password123',
@@ -228,7 +228,7 @@ describe('Authentication Endpoints', () => {
             expect(response.body.error).toBe('Email ou mot de passe incorrect')
         })
 // erreur serveur
-        it('dois retourner 500 en cas d\'erreur serveur', async () => {
+        it('dois retourner 500 en cas d erreur serveur', async () => {
             const credentials = {
                 email: 'test@example.com',
                 password: 'password123',
