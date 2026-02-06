@@ -5,9 +5,11 @@ import {authenticateToken} from './auth/auth.middleware'
 
 export const userRouter = Router()
 
-
-// GET: Récupérer tous les utilisateurs
-// Accessible via GET /users
+/**
+ * GET /users - Récupérer tous les utilisateurs
+ * @returns {200} Array de tous les utilisateurs
+ * @throws {500} Erreur serveur
+ */
 userRouter.get('/', async (_req: Request, res: Response) => {
     try {
         const users = await prisma.user.findMany()
@@ -17,8 +19,13 @@ userRouter.get('/', async (_req: Request, res: Response) => {
     }
 })
 
-// GET: Récupérer un utilisateur par ID
-// Accessible via GET /users/:id
+/**
+ * GET /users/:id - Récupérer un utilisateur par ID
+ * @param {number} req.params.id - ID de l'utilisateur
+ * @returns {200} Objet utilisateur
+ * @throws {404} Utilisateur non trouvé
+ * @throws {500} Erreur serveur
+ */
 userRouter.get('/:id', async (req: Request, res: Response): Promise<void> => {
     try {
         const {id} = req.params
@@ -37,8 +44,17 @@ userRouter.get('/:id', async (req: Request, res: Response): Promise<void> => {
     }
 })
 
-// Route protégée : seuls les utilisateurs authentifiés peuvent créer un utilisateur
-// Accessible via POST /users
+/**
+ * POST /users - Créer un nouvel utilisateur (protégé)
+ * Route accessible uniquement par un utilisateur authentifié
+ * @param {string} req.body.username - Nom d'utilisateur
+ * @param {string} req.body.email - Email de l'utilisateur
+ * @param {string} req.body.password - Mot de passe (sera hashé)
+ * @returns {201} Nouvel utilisateur créé
+ * @throws {401} Utilisateur non authentifié
+ * @throws {400} Erreur lors de la création
+ * @throws {500} Erreur serveur
+ */
 userRouter.post('/', authenticateToken, async (req: Request, res: Response) => {
     const {username, email, password} = req.body
 

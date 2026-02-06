@@ -6,7 +6,17 @@ import {env} from '../env'
 
 export const authRouter = Router()
 
-// la création
+/**
+ * POST /sign-up - Créer un nouvel utilisateur
+ * Enregistre un nouvel utilisateur avec email, username et password
+ * @param {string} req.body.email - Email de l'utilisateur
+ * @param {string} req.body.username - Nom d'utilisateur
+ * @param {string} req.body.password - Mot de passe (sera hashé)
+ * @returns {201} Utilisateur créé avec token JWT
+ * @throws {400} Email, username ou password manquant
+ * @throws {409} Email déjà utilisé
+ * @throws {500} Erreur serveur
+ */
 authRouter.post('/sign-up', async (req: Request, res: Response) => {
     const {email, username, password} = req.body
 
@@ -67,7 +77,16 @@ authRouter.post('/sign-up', async (req: Request, res: Response) => {
 })
 
 
-// la conexion
+/**
+ * POST /sign-in - Connexion utilisateur
+ * Authentifie un utilisateur et retourne un token JWT
+ * @param {string} req.body.email - Email de l'utilisateur
+ * @param {string} req.body.password - Mot de passe en clair
+ * @returns {200} Utilisateur authentifié avec token JWT
+ * @throws {400} Email ou password manquant
+ * @throws {401} Email ou mot de passe incorrect
+ * @throws {500} Erreur serveur
+ */
 authRouter.post('/sign-in', async (req: Request, res: Response) => {
     const {email, password} = req.body
 
