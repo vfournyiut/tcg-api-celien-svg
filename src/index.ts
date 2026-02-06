@@ -1,51 +1,52 @@
-import {createServer} from "http";
-import {env} from "./env";
-import express from "express";
-import cors from "cors";
-import {authRouter} from "./auth/auth.route";
-import cardsRoutes from "./cards/cards.route";
+import { createServer } from 'http'
+import { env } from './env'
+import express from 'express'
+import cors from 'cors'
+import { authRouter } from './auth/auth.route'
+import cardsRoutes from './cards/cards.route'
 
 // Create Express app
-export const app = express();
+export const app = express()
 
 // Middlewares
 app.use(
-    cors({
-        origin: true,  // Autorise toutes les origines
-        credentials: true,
-    }),
-);
+  cors({
+    origin: true, // Autorise toutes les origines
+    credentials: true,
+  }),
+)
 
-app.use(express.json());
+app.use(express.json())
 
 // Serve static files (Socket.io test client)
-app.use(express.static('public'));
+app.use(express.static('public'))
 
 // Health check endpoint
-app.get("/api/health", (_req, res) => {
-    res.json({status: "ok", message: "TCG Backend Server is running"});
-});
+app.get('/api/health', (_req, res) => {
+  res.json({ status: 'ok', message: 'TCG Backend Server is running' })
+})
 
 // Routes d'authentification
-app.use("/api/auth", authRouter);
+app.use('/api/auth', authRouter)
 
 // routes du catalogue de cartes
-app.use("/api/cards", cardsRoutes);
+app.use('/api/cards', cardsRoutes)
 
 // Start server only if this file is run directly (not imported for tests)
 if (require.main === module) {
-    // Create HTTP server
-    const httpServer = createServer(app);
+  // Create HTTP server
+  const httpServer = createServer(app)
 
-
-    // Start server
-    try {
-        httpServer.listen(env.PORT, () => {
-            console.log(`\n🚀 Server is running on http://localhost:${env.PORT}`);
-            console.log(`🧪 Socket.io Test Client available at http://localhost:${env.PORT}`);
-        });
-    } catch (error) {
-        console.error("Failed to start server:", error);
-        process.exit(1);
-    }
+  // Start server
+  try {
+    httpServer.listen(env.PORT, () => {
+      console.log(`\n🚀 Server is running on http://localhost:${env.PORT}`)
+      console.log(
+        `🧪 Socket.io Test Client available at http://localhost:${env.PORT}`,
+      )
+    })
+  } catch (error) {
+    console.error('Failed to start server:', error)
+    process.exit(1)
+  }
 }
