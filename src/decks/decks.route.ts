@@ -25,7 +25,15 @@ function formatDeckWithCards(deck: any) {
     };
 }
 
-//Créer un deck de 10 cartes pour l'utilisateur connecté
+/**
+ * Helper function to validate deck ID
+ */
+function validateDeckId(id: string): number | null {
+    const parsed = parseInt(id, 10);
+    return isNaN(parsed) || parsed <= 0 ? null : parsed;
+}
+
+// Créer un deck de 10 cartes pour l'utilisateur connecté
 
 deckrouter.post("/", authenticateToken, async (req: RequestWithUser, res: Response) => {
     try {
@@ -134,14 +142,13 @@ deckrouter.get("/mine", authenticateToken, async (req: RequestWithUser, res: Res
 deckrouter.get("/:id", authenticateToken, async (req: RequestWithUser, res: Response) => {
     try {
         const userId = req.user?.userId;
-        const deckId = parseInt(req.params.id);
+        const deckId = validateDeckId(req.params.id);
 
         if (!userId) {
             return res.status(401).json({ error: "Utilisateur non authentifié" });
         }
 
-
-        if (isNaN(deckId)) {
+        if (deckId === null) {
             return res.status(400).json({ error: "ID de deck invalide" });
         }
 
@@ -177,14 +184,14 @@ deckrouter.get("/:id", authenticateToken, async (req: RequestWithUser, res: Resp
 deckrouter.patch("/:id", authenticateToken, async (req: RequestWithUser, res: Response) => {
     try {
         const userId = req.user?.userId;
-        const deckId = parseInt(req.params.id);
+        const deckId = validateDeckId(req.params.id);
         const { name, cards } = req.body;
 
         if (!userId) {
             return res.status(401).json({ error: "Utilisateur non authentifié" });
         }
 
-        if (isNaN(deckId)) {
+        if (deckId === null) {
             return res.status(400).json({ error: "ID de deck invalide" });
         }
 
@@ -266,13 +273,13 @@ deckrouter.patch("/:id", authenticateToken, async (req: RequestWithUser, res: Re
 deckrouter.delete("/:id", authenticateToken, async (req: RequestWithUser, res: Response) => {
     try {
         const userId = req.user?.userId;
-        const deckId = parseInt(req.params.id);
+        const deckId = validateDeckId(req.params.id);
 
         if (!userId) {
             return res.status(401).json({ error: "Utilisateur non authentifié" });
         }
 
-        if (isNaN(deckId)) {
+        if (deckId === null) {
             return res.status(400).json({ error: "ID de deck invalide" });
         }
 
