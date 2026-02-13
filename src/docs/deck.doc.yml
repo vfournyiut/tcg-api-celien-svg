@@ -1,0 +1,260 @@
+paths:
+  /api/decks:
+    post:
+      summary: Créer un deck
+      tags: [Decks]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name: { type: string }
+                cards:
+                  type: array
+                  items: { type: integer }
+              example:
+                name: "Starter Team"
+                cards: [1,2,3,4,5,6,7,8,9,10]
+      responses:
+        201:
+          description: Deck créé
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message: { type: string }
+                  deck:
+                    $ref: "#/components/schemas/Deck"
+        400:
+          description: Erreur de validation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        401:
+          description: Non authentifié
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /api/decks/mine:
+    get:
+      summary: Liste des decks de l'utilisateur connecté
+      tags: [Decks]
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: Liste des decks
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message: { type: string }
+                  count: { type: integer }
+                  decks:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Deck"
+
+              examples:
+                sample:
+                  value:
+                    message: "Decks récupérés avec succès"
+                    count: 1
+                    decks:
+                      - id: 1
+                        name: "Starter Team"
+                        userId: 1
+                        createdAt: "2025-01-01T00:00:00.000Z"
+                        updatedAt: "2025-01-01T00:00:00.000Z"
+                        cards:
+                          - id: 1
+                            name: Pikachu
+                            hp: 60
+                            attack: 20
+                            type: Electric
+                            pokedexNumber: 25
+
+  /api/decks/{id}:
+    get:
+      summary: Récupérer un deck
+      tags: [Decks]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+          example: 1
+      responses:
+        200:
+          description: Deck trouvé
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message: { type: string }
+                  deck:
+                    $ref: "#/components/schemas/Deck"
+              examples:
+                sample:
+                  value:
+                    message: "Deck récupéré avec succès"
+                    deck:
+                      id: 1
+                      name: "Starter Team"
+                      userId: 1
+                      createdAt: "2025-01-01T00:00:00.000Z"
+                      updatedAt: "2025-01-01T00:00:00.000Z"
+                      cards:
+                        - id: 1
+                          name: Pikachu
+                          hp: 60
+                          attack: 20
+                          type: Electric
+                          pokedexNumber: 25
+        400:
+          description: ID invalide
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        403:
+          description: Accès interdit
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        404:
+          description: Deck introuvable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+    patch:
+      summary: Modifier un deck
+      tags: [Decks]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+          example: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name: { type: string }
+                cards:
+                  type: array
+                  items: { type: integer }
+              example:
+                name: "New Name"
+                cards: [1,2,3,4,5,6,7,8,9,10]
+      responses:
+        200:
+          description: Deck modifié
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message: { type: string }
+                  deck:
+                    $ref: "#/components/schemas/Deck"
+              examples:
+                sample:
+                  value:
+                    message: "Deck modifié avec succès"
+                    deck:
+                      id: 1
+                      name: "New Name"
+                      userId: 1
+                      createdAt: "2025-01-01T00:00:00.000Z"
+                      updatedAt: "2025-01-02T00:00:00.000Z"
+                      cards:
+                        - id: 1
+                          name: Pikachu
+                          hp: 60
+                          attack: 20
+                          type: Electric
+                          pokedexNumber: 25
+        400:
+          description: Erreur de validation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        403:
+          description: Accès interdit
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        404:
+          description: Deck introuvable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+    delete:
+      summary: Supprimer un deck
+      tags: [Decks]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+          example: 1
+      responses:
+        200:
+          description: Deck supprimé
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message: { type: string }
+                  deckId: { type: integer }
+              examples:
+                sample:
+                  value:
+                    message: "Deck supprimé avec succès"
+                    deckId: 1
+        400:
+          description: ID invalide
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        403:
+          description: Accès interdit
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        404:
+          description: Deck introuvable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"

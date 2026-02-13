@@ -1,55 +1,35 @@
-import {createServer} from "http";
-import {env} from "./env";
 import express from "express";
 import cors from "cors";
-import {authRouter} from "./auth/auth.route";
 import cardsRoutes from "./cards/cards.route";
 import deckrouter from "./decks/decks.route";
+import swaggerUi from "swagger-ui-express";
+import { swaggerDocument } from "./docs";
+import { authRouter } from "./auth/auth.route";
 
-// Create Express app
-export const app = express();
+const app = express();
 
 // Middlewares
-app.use(
-    cors({
-        origin: true,  // Autorise toutes les origines
-        credentials: true,
-    }),
-);
-
+app.use(cors());
 app.use(express.json());
 
-// Serve static files (Socket.io test client)
-app.use(express.static('public'));
-
-// Health check endpoint
-app.get("/api/health", (_req, res) => {
-    res.json({status: "ok", message: "TCG Backend Server is running"});
-});
-
-// Routes d'authentification
-app.use("/api/auth", authRouter);
-
-// routes du catalogue de cartes
+// Routes API
+app.use("/auth", authRouter);
 app.use("/api/cards", cardsRoutes);
-
-// routes des decks
 app.use("/api/decks", deckrouter);
 
-// Start server only if this file is run directly (not imported for tests)
-if (require.main === module) {
-    // Create HTTP server
-    const httpServer = createServer(app);
+// Swagger documentation
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
+// Test route
+app.get("/", (req, res) => {
+    res.json({ message: "TCG API is running" });
+});
 
-    // Start server
-    try {
-        httpServer.listen(env.PORT, () => {
-            console.log(`\n🚀 Server is running on http://localhost:${env.PORT}`);
-            console.log(`🧪 Socket.io Test Client available at http://localhost:${env.PORT}`);
-        });
-    } catch (error) {
-        console.error("Failed to start server:", error);
-        process.exit(1);
-    }
-}
+// Start server
+const PORT = process.env.PORT || 3001;
+
+app.listen(PORT, () => {
+    console.log(`🚀 Server running on http://localhost:${PORT}`);
+    console.log(`📘 Swagger docs available at http://localhost:${PORT}/api-docs`);
+});
+
