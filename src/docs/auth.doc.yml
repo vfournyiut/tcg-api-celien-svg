@@ -1,0 +1,106 @@
+paths:
+  /auth/sign-up:
+    post:
+      summary: Inscription
+      tags: [Auth]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email: { type: string }
+                username: { type: string }
+                password: { type: string }
+              example:
+                email: user@example.com
+                username: ash
+                password: secret123
+      responses:
+        201:
+          description: Utilisateur créé
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message: { type: string }
+                  token: { type: string }
+                  user:
+                    $ref: "#/components/schemas/User"
+              examples:
+                success:
+                  value:
+                    message: "Inscription réussie"
+                    token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                    user:
+                      id: 1
+                      username: ash
+                      email: user@example.com
+                      createdAt: "2025-01-01T00:00:00.000Z"
+                      updatedAt: "2025-01-01T00:00:00.000Z"
+        400:
+          description: Données invalides
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        409:
+          description: Email déjà utilisé
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /auth/sign-in:
+    post:
+      summary: Connexion
+      tags: [Auth]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email: { type: string }
+                password: { type: string }
+              example:
+                email: user@example.com
+                password: secret123
+      responses:
+        200:
+          description: Token JWT
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message: { type: string }
+                  token: { type: string }
+                  user:
+                    $ref: "#/components/schemas/User"
+              examples:
+                success:
+                  value:
+                    message: "Connexion réussie"
+                    token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                    user:
+                      id: 1
+                      username: ash
+                      email: user@example.com
+                      createdAt: "2025-01-01T00:00:00.000Z"
+                      updatedAt: "2025-01-01T00:00:00.000Z"
+        400:
+          description: Données invalides
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        401:
+          description: Identifiants invalides
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"

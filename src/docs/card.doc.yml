@@ -1,0 +1,35 @@
+paths:
+  /api/cards:
+    get:
+      summary: Liste toutes les cartes
+      tags: [Cards]
+      responses:
+        200:
+          description: Liste des cartes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Card"
+              examples:
+                sample:
+                  value:
+                    - id: 1
+                      name: Pikachu
+                      hp: 60
+                      attack: 20
+                      type: Electric
+                      pokedexNumber: 25
+                    - id: 2
+                      name: Bulbasaur
+                      hp: 45
+                      attack: 12
+                      type: Grass
+                      pokedexNumber: 1
+        500:
+          description: Erreur serveur
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"

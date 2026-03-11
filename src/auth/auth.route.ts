@@ -80,9 +80,18 @@ authRouter.post('/sign-up', async (req: Request, res: Response) => {
       where: { email },
     })
 
-    if (existingUserByEmail) {
-      return res.status(409).json({ error: 'Email déjà utilisé' })
-    }
+/**
+ * POST /sign-in - Connexion utilisateur
+ * Authentifie un utilisateur et retourne un token JWT
+ * @param {string} req.body.email - Email de l'utilisateur
+ * @param {string} req.body.password - Mot de passe en clair
+ * @returns {200} Utilisateur authentifié avec token JWT
+ * @throws {400} Email ou password manquant
+ * @throws {401} Email ou mot de passe incorrect
+ * @throws {500} Erreur serveur
+ */
+authRouter.post('/sign-in', async (req: Request, res: Response) => {
+    const {email, password} = req.body
 
     // 4. Hasher le mot de passe
     const hashedPassword = await bcryptjs.hash(password, 10)

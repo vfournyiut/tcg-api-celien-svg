@@ -3,6 +3,8 @@ import { prisma } from '../database'
 
 const cardsRouter = Router()
 
+const cardsRouter = Router();
+
 /**
  * GET /cards - Récupérer toutes les cartes
  * Retourne la liste complète des cartes triées par numéro Pokédex
