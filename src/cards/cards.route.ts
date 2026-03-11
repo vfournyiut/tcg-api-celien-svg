@@ -1,6 +1,7 @@
-import { Router } from "express";
-import { prisma } from "../database";
+import { Router } from 'express'
+import { prisma } from '../database'
 
+const cardsRouter = Router()
 
 const cardsRouter = Router();
 
@@ -21,4 +22,4 @@ cardsRouter.get("/", async (_req, res) => {
     }
 });
 
-export default  cardsRouter ;
+export default cardsRouter
