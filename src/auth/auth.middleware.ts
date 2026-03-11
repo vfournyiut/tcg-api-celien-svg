@@ -2,6 +2,17 @@ import { NextFunction, Request, Response } from 'express'
 import jwt from 'jsonwebtoken'
 import { env } from '../env'
 
+/**
+ * Middleware d'authentification JWT
+ * Vérifie la validité du token JWT dans l'en-tête Authorization et injecte les données utilisateur
+ * @param {Request} req - Objet requête Express contenant l'en-tête Authorization
+ * @param {Response} res - Objet réponse Express
+ * @param {NextFunction} next - Fonction pour passer au middleware suivant
+ * @throws {401} Token manquant
+ * @throws {401} Token invalide
+ * @throws {401} Token expiré
+ * @throws {401} Authentification échouée
+ */
 export const authenticateToken = (
   req: Request,
   res: Response,

@@ -12,7 +12,9 @@ interface RequestWithUser extends Request {
 const deckrouter = Router();
 
 /**
- * Helper function to format deck with cards
+ * Formate un deck avec ses cartes associées
+ * @param {any} deck - Objet deck de Prisma avec ses cartes
+ * @returns {object} Deck formaté avec tableau de cartes
  */
 function formatDeckWithCards(deck: any) {
     return {
@@ -26,15 +28,25 @@ function formatDeckWithCards(deck: any) {
 }
 
 /**
- * Helper function to validate deck ID
+ * Valide et parse un ID de deck
+ * @param {string} id - ID à valider et parser
+ * @returns {number|null} ID parsé ou null si invalide
  */
 function validateDeckId(id: string): number | null {
     const parsed = parseInt(id, 10);
     return isNaN(parsed) || parsed <= 0 ? null : parsed;
 }
 
-// Créer un deck de 10 cartes pour l'utilisateur connecté
-
+/**
+ * POST /decks - Créer un deck
+ * Crée un nouveau deck avec exactement 10 cartes pour l'utilisateur connecté
+ * @param {number} req.body.cards - Array de 10 IDs de cartes
+ * @param {string} req.body.name - Nom du deck
+ * @returns {201} Deck créé avec ses cartes
+ * @throws {401} Utilisateur non authentifié
+ * @throws {400} Données invalides ou 10 cartes manquantes
+ * @throws {500} Erreur serveur
+ */
 deckrouter.post("/", authenticateToken, async (req: RequestWithUser, res: Response) => {
     try {
         const userId = req.user?.userId;
@@ -104,8 +116,13 @@ deckrouter.post("/", authenticateToken, async (req: RequestWithUser, res: Respon
     }
 });
 
-// liste de tous les decks de l'utilisateur connectér
-
+/**
+ * GET /decks/mine - Liste les decks de l'utilisateur
+ * Retourne tous les decks créés par l'utilisateur connecté
+ * @returns {200} Objet avec count et array de decks
+ * @throws {401} Utilisateur non authentifié
+ * @throws {500} Erreur serveur
+ */
 deckrouter.get("/mine", authenticateToken, async (req: RequestWithUser, res: Response) => {
     try {
         const userId = req.user?.userId;
@@ -137,8 +154,17 @@ deckrouter.get("/mine", authenticateToken, async (req: RequestWithUser, res: Res
     }
 });
 
-// Consulter un deck spécifique avec ses cartes
-
+/**
+ * GET /decks/:id - Récupérer un deck spécifique
+ * Retourne les détails d'un deck si l'utilisateur en est propriétaire
+ * @param {number} req.params.id - ID du deck
+ * @returns {200} Deck avec ses cartes
+ * @throws {400} ID invalide
+ * @throws {401} Utilisateur non authentifié
+ * @throws {403} Accès non autorisé
+ * @throws {404} Deck non trouvé
+ * @throws {500} Erreur serveur
+ */
 deckrouter.get("/:id", authenticateToken, async (req: RequestWithUser, res: Response) => {
     try {
         const userId = req.user?.userId;
@@ -180,7 +206,19 @@ deckrouter.get("/:id", authenticateToken, async (req: RequestWithUser, res: Resp
     }
 });
 
-//Modifier le nom et/ou les cartes du deck
+/**
+ * PATCH /decks/:id - Modifier un deck
+ * Met à jour le nom et/ou les 10 cartes du deck
+ * @param {number} req.params.id - ID du deck
+ * @param {string} [req.body.name] - Nouveau nom du deck
+ * @param {number[]} [req.body.cards] - Nouveaux IDs de 10 cartes
+ * @returns {200} Deck modifié
+ * @throws {400} ID invalide ou données invalides
+ * @throws {401} Utilisateur non authentifié
+ * @throws {403} Accès non autorisé
+ * @throws {404} Deck non trouvé
+ * @throws {500} Erreur serveur
+ */
 deckrouter.patch("/:id", authenticateToken, async (req: RequestWithUser, res: Response) => {
     try {
         const userId = req.user?.userId;
@@ -269,7 +307,17 @@ deckrouter.patch("/:id", authenticateToken, async (req: RequestWithUser, res: Re
     }
 });
 
-//Supprimer définitivement un deck
+/**
+ * DELETE /decks/:id - Supprimer un deck
+ * Supprime définitivement un deck et toutes ses cartes associées
+ * @param {number} req.params.id - ID du deck à supprimer
+ * @returns {200} Message de confirmation
+ * @throws {400} ID invalide
+ * @throws {401} Utilisateur non authentifié
+ * @throws {403} Accès non autorisé
+ * @throws {404} Deck non trouvé
+ * @throws {500} Erreur serveur
+ */
 deckrouter.delete("/:id", authenticateToken, async (req: RequestWithUser, res: Response) => {
     try {
         const userId = req.user?.userId;
