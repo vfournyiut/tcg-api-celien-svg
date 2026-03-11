@@ -36,6 +36,9 @@ app.use('/api/cards', cardsRoutes)
 // routes des decks
 app.use("/api/decks", deckrouter);
 
+// routes des decks
+app.use("/api/decks", deckrouter);
+
 // Start server only if this file is run directly (not imported for tests)
 if (require.main === module) {
   // Create HTTP server

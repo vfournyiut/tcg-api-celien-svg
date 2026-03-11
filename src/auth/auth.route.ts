@@ -8,14 +8,61 @@ export const authRouter = Router()
 
 // la création
 authRouter.post('/sign-up', async (req: Request, res: Response) => {
-  const { email, username, password } = req.body
+    const {email, username, password} = req.body
 
-  try {
-    // 1. Valider les données
-    if (!email || !username || !password) {
-      return res.status(400).json({
-        error: 'Email, username et password sont requis',
-      })
+    try {
+        // 1. Valider les données
+        if (!email || !username || !password) {
+            return res.status(400).json({
+                error: 'Email, username et password sont requis',
+            })
+        }
+
+
+        // 2. Vérifier si l'email n'est pas déja utilisé
+        const existingUserByEmail = await prisma.user.findUnique({
+            where: {email},
+        })
+
+        if (existingUserByEmail) {
+            return res.status(409).json({error: 'Email déjà utilisé'})
+        }
+
+        // 4. Hasher le mot de passe
+        const hashedPassword = await bcryptjs.hash(password, 10)
+
+        // 5. Créer l'utilisateur
+        const user = await prisma.user.create({
+            data: {
+                email,
+                username,
+                password: hashedPassword,
+            },
+        })
+
+        // 6. Génére le JWT
+        const token = jwt.sign(
+            {
+                userId: user.id,
+                email: user.email,
+            },
+            env.JWT_SECRET,
+            {expiresIn: '7d'}, // Le token expire dans 7 jours
+        )
+
+        // 7. Retourner le token et les infos utilisateur sans le mot dee passe
+        return res.status(201).json({
+            message: 'Inscription réussie',
+            token,
+            user: {
+                id: user.id,
+                username: user.username,
+                email: user.email,
+            },
+        })
+    } catch (error) {
+        console.error('Erreur lors de l inscription:', error)
+        return res.status(500).json({error: 'Erreur serveur lors de l inscription'})
     }
 
     // 2. Vérifier si l'email n'est pas déja utilisé
